@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
+
+
 <head>
   <title>Articles</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+<div class="container">
 <h2>Saved Articles</h2>
 <button onclick="logout()">Logout</button>
 
@@ -71,12 +74,24 @@ async function loadArticles() {
 
   articles.forEach(a => {
     const li = document.createElement("li");
+    li.className = "article-card";
+
     li.innerHTML = `
-      <b>${a.title}</b><br/>
-      Tags:
-      <input value="${a.tags.map(t => t.name).join(",")}"
-        onchange="updateTags(${a.id}, this.value)" />
+    <div class="article-title">${a.title}</div>
+
+    <a href="${a.url}" target="_blank">
+        Open on Wikipedia ↗
+    </a>
+
+    <div class="tags-input">
+        <small>Tags:</small>
+        <input
+        value="${a.tags.map(t => t.name).join(", ")}"
+        onchange="updateTags(${a.id}, this.value)"
+        />
+    </div>
     `;
+
     ul.appendChild(li);
   });
 }
@@ -96,6 +111,6 @@ async function updateTags(id, tags) {
 
 loadArticles();
 </script>
-
+</div>
 </body>
 </html>
