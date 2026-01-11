@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Articles</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<h2>Saved Articles</h2>
+<button onclick="logout()">Logout</button>
+
+<hr />
+
+<input id="query" placeholder="Search Wikipedia" />
+<button onclick="search()">Search</button>
+
+<ul id="results"></ul>
+
+<hr />
+
+<h3>Your Articles</h3>
+<ul id="articles"></ul>
+
+<script src="app.js"></script>
+<script>
+if (!getToken()) {
+  window.location.href = "login.html";
+}
+
+async function search() {
+  const q = document.getElementById("query").value;
+  const res = await fetch(`${API}/search?q=${q}`);
+  const data = await res.json();
+
+  const ul = document.getElementById("results");
+  ul.innerHTML = "";
+
+  data.results.forEach(a => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      ${a.title}
+      <button onclick="saveArticle('${a.title}','${a.url}')">Save</button>
+    `;
+    ul.appendChild(li);
+  });
+}
+
+async function saveArticle(title, url) {
+  await fetch(`${API}/articles`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${getToken()}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ title, url })
+  });
+
+  loadArticles();
+}
+
+async function loadArticles() {
+  const res = await fetch(`${API}/articles`, {
+    headers: {
+      "Authorization": `Bearer ${getToken()}`
+    }
+  });
+
+  const articles = await res.json();
+  const ul = document.getElementById("articles");
+  ul.innerHTML = "";
+
+  articles.forEach(a => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <b>${a.title}</b><br/>
+      Tags:
+      <input value="${a.tags.map(t => t.name).join(",")}"
+        onchange="updateTags(${a.id}, this.value)" />
+    `;
+    ul.appendChild(li);
+  });
+}
+
+async function updateTags(id, tags) {
+  await fetch(`${API}/articles/${id}/tags`, {
+    method: "PUT",
+    headers: {
+      "Authorization": `Bearer ${getToken()}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      tags: tags.split(",").map(t => t.trim())
+    })
+  });
+}
+
+loadArticles();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Marvix AI – Bookmark Tool</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<h2>Marvix AI – Wikipedia Bookmark Tool</h2>
+
+<!-- LOGIN -->
+<div id="login">
+  <input id="email" placeholder="Email" />
+  <input id="password" type="password" placeholder="Password" />
+  <button onclick="login()">Login</button>
+</div>
+
+<hr />
+
+<!-- SEARCH -->
+<div>
+  <input id="query" placeholder="Search Wikipedia" />
+  <button onclick="search()">Search</button>
+</div>
+
+<ul id="results"></ul>
+
+<hr />
+
+<!-- SAVED ARTICLES -->
+<h3>Saved Articles</h3>
+<ul id="articles"></ul>
+
+<script src="app.js"></script>
+</body>
+</html>
