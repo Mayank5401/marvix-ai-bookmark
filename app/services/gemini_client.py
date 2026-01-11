@@ -1,3 +1,4 @@
+'''
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
 
@@ -10,3 +11,4 @@ def get_gemini_llm():
         temperature=0.3,
         google_api_key= GEMINI_API_KEY
     )
+'''
